@@ -156,7 +156,10 @@
                                 dis = dista;
                             }
 
-                            console.log(dis);
+                            distanceContainer.innerHTML = '';
+                            const value = document.createElement('pre');
+                            value.textContent = `Total distance: ${dis}m`;
+                            distanceContainer.appendChild(value);
                         })
                     }
                 }
@@ -242,10 +245,7 @@
         // for miles
         let r = 6371;
    
-        distanceContainer.innerHTML = '';
-        const value = document.createElement('pre');
-        value.textContent = `Total distance: ${parseInt((c * r) * 1000)}m`;
-        distanceContainer.appendChild(value);
+        
 
         // calculate the result
         return(parseInt((c * r) * 1000));
