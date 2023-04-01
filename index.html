@@ -144,7 +144,6 @@
                         let dis = 0;
                         distanceContainer.innerHTML = '';
 
-                        console.time('set');
                         cord_data.forEach(data => {
                             
                             let dista = distance(data.lat, data.lng, Latitude, Longitude)
@@ -163,7 +162,6 @@
                         const value = document.createElement('pre');
                         value.textContent = `Total distance: ${dis}m`;
                         distanceContainer.appendChild(value);
-                        console.timeEnd('set');
                     }
                 }
             }, 2000);
