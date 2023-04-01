@@ -255,51 +255,5 @@
 
 </script>
 
-
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-app.js"></script>
-
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
-
-<script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-        apiKey: "AIzaSyDuEVO2MeGpEmwLHHepto-VNH60vCGR3Yc",
-        authDomain: "xsmap-b6fb3.firebaseapp.com",
-        projectId: "xsmap-b6fb3",
-        storageBucket: "xsmap-b6fb3.appspot.com",
-        messagingSenderId: "406605448787",
-        appId: "1:406605448787:web:bfef942a543d70d8d268a6"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-
-
-
-    var leadsRef = firebase.database().ref('cords');
-    leadsRef.on('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-            var childData = childSnapshot.val();
-            len++;
-            console.log(childData);
-        });
-    });
-
-
-    function saveCords() {
-        let m = document.getElementById('map_name');
-        firebase.database().ref('cords').child(len).set({
-            name: m.value,
-            cords: {
-                lat: Latitude,
-                long: Longitude
-            }
-        })
-    }
-</script>
-
 </body>
 </html>
