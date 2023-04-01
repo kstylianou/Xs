@@ -52,7 +52,6 @@
 
     fetch('./data.json').then(response => response.json())
         .then(data => {
-            console.log(data);
             cord_data = data;
         })
 
@@ -100,16 +99,6 @@
     }
 
     function showMap(){
-
-        const successCallback = (position) => {
-        console.log(position);
-        };
-
-        const errorCallback = (error) => {
-        console.log(error);
-        };
-
-        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 
         mapboxgl.accessToken = 'pk.eyJ1Ijoia3N0eWxpYW5vdSIsImEiOiJja2w4OWdlY3owZHFqMndydnlqYWdwODhzIn0.5p3nIkXRh8PeBiM-caYVJQ';
         var map = new mapboxgl.Map({
