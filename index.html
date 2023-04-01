@@ -142,6 +142,7 @@
                         }, true);
 
                         let dis = 0;
+                        distanceContainer.innerHTML = '';
 
                         console.time('set');
                         cord_data.forEach(data => {
@@ -156,12 +157,12 @@
                             if(dis > dista) {
                                 dis = dista;
                             }
-
-                            distanceContainer.innerHTML = '';
-                            const value = document.createElement('pre');
-                            value.textContent = `Total distance: ${dis}m`;
-                            distanceContainer.appendChild(value);
+                            
                         })
+
+                        const value = document.createElement('pre');
+                        value.textContent = `Total distance: ${dis}m`;
+                        distanceContainer.appendChild(value);
                         console.timeEnd('set');
                     }
                 }
