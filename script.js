@@ -72,14 +72,27 @@ let len = 0;
 
         map.on('load', function () {
 
-            map.addControl(new mapboxgl.GeolocateControl({
+            let geolocate = new mapboxgl.GeolocateControl({
                 positionOptions: {
                     enableHighAccuracy: true
                 },
                 trackUserLocation: true,
                 showUserHeading: true
-            }));
+            });
 
+            let polygon= [];
+            cord_data.forEach(item => {
+                polygon.push(new Point(item[0], item[1]));
+            });
+
+            map.addControl(geolocate);
+
+            geolocate.on('geolocate', function(e) {
+                var lon = e.coords.longitude;
+                var lat = e.coords.latitude
+                var position = [lon, lat];
+                updatePolygonCheck(position, polygon)
+          });
 
             map.addSource('maine', {
                 'type': 'geojson',
@@ -93,35 +106,11 @@ let len = 0;
                 }
             });
 
-            
-
-            let polygon= [];
-            cord_data.forEach(item => {
-                polygon.push(new Point(item[0], item[1]));
-            });
-
-        console.log(polygon);
-
-        let p = new Point( Longitude, Latitude );
-        console.log(p);
-        let n = cord_data.length;
+        
     
         // Function call
 
-        distanceContainer.innerHTML = '';
 
-        if (checkInside(polygon, n, p)) {
-            console.log("Point is inside.");
-            const value = document.createElement('pre');
-            value.textContent = `Point is inside.`;
-            distanceContainer.appendChild(value);
-        }
-        else {
-            console.log("Point is outside.");
-            const value = document.createElement('pre');
-            value.textContent = `Point is outside.`;
-            distanceContainer.appendChild(value);
-        }
                  
                 // Add a new layer to visualize the polygon.
                 map.addLayer({
@@ -213,11 +202,11 @@ let len = 0;
                 .addTo(map);
 
 
-                cord_data.forEach(item => {
-                    new mapboxgl.Marker()
-                    .setLngLat([item[0], item[1]])
-                    .addTo(map);
-                })
+                // cord_data.forEach(item => {
+                //     new mapboxgl.Marker()
+                //     .setLngLat([item[0], item[1]])
+                //     .addTo(map);
+                // })
             
             map.on('click', (e) => {
                 let cor = e.lngLat.wrap()
@@ -279,4 +268,26 @@ let len = 0;
         }
     }
 
-    getScreenLock().then(response => console.log(response))
+    getScreenLock().then(response => console.log(response));
+
+
+    function updatePolygonCheck(cords, polygon) {
+
+        let p = new Point(cords[0], cords[1]);
+        let n = cord_data.length;
+
+        distanceContainer.innerHTML = '';
+
+        if (checkInside(polygon, n, p)) {
+            console.log("Point is inside.");
+            const value = document.createElement('pre');
+            value.textContent = `Point is inside.`;
+            distanceContainer.appendChild(value);
+        }
+        else {
+            console.log("Point is outside.");
+            const value = document.createElement('pre');
+            value.textContent = `Point is outside.`;
+            distanceContainer.appendChild(value);
+        }
+    }
