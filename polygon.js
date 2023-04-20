@@ -87,7 +87,7 @@ function checkInside(poly, n, p)
         return false;
  
     // Create a point at infinity, y is same as point p
-    let tmp=new Point(9999, p.y);
+    let tmp=new Point(999999999999999999999999999999999999999, p.y);
     let exline = new line( p, tmp );
     let count = 0;
     let i = 0;

@@ -69,6 +69,16 @@ let len = 0;
         });
 
         map.on('load', function () {
+
+            map.addControl(new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true,
+                showUserHeading: true
+            }));
+
+
             map.addSource('maine', {
                 'type': 'geojson',
                 'data': {
@@ -91,7 +101,8 @@ let len = 0;
         console.log(polygon);
 
         let p = new Point( Longitude, Latitude );
-        let n = 4;
+        console.log(p);
+        let n = cord_data.length;
     
         // Function call
 
@@ -161,16 +172,16 @@ let len = 0;
 
 
 
-            map.addSource('drone', { type: 'geojson', data: urlJson });
-            map.addLayer({
-                'id': 'drone',
-                'type': 'symbol',
-                'source': 'drone',
-                'layout': {
-                    'icon-image': 'rocket-15',
-                    'icon-rotate': ['get', 'rotation']
-                }
-            });
+            // map.addSource('drone', { type: 'geojson', data: urlJson });
+            // map.addLayer({
+            //     'id': 'drone',
+            //     'type': 'symbol',
+            //     'source': 'drone',
+            //     'layout': {
+            //         'icon-image': 'rocket-15',
+            //         'icon-rotate': ['get', 'rotation']
+            //     }
+            // });
 
             map.addSource('line', {
                 'type': 'geojson',
@@ -200,6 +211,11 @@ let len = 0;
                 .addTo(map);
 
 
+                cord_data.forEach(item => {
+                    new mapboxgl.Marker()
+                    .setLngLat([item[0], item[1]])
+                    .addTo(map);
+                })
             
             map.on('click', (e) => {
                 let cor = e.lngLat.wrap()
