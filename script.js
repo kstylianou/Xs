@@ -1,7 +1,6 @@
 let Latitude;
-    let Longitude;
-    let len = 0;
-    showMap();
+let Longitude;
+let len = 0;
     const distanceContainer = document.getElementById('distance');
 
 
@@ -10,9 +9,10 @@ let Latitude;
 
     let cord_data = [];
 
-    fetch('./data.json').then(response => response.json())
+     fetch('./data.json').then(response => response.json())
         .then(data => {
             cord_data = data;
+            showMap();
         })
 
     // Create a GeoJSON source with an empty lineString.
@@ -69,6 +69,71 @@ let Latitude;
         });
 
         map.on('load', function () {
+            map.addSource('maine', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'geometry': {
+                    'type': 'Polygon',
+                    // These coordinates outline Maine.
+                    'coordinates': [cord_data]
+                    }
+                }
+            });
+
+            
+
+            let polygon= [];
+            cord_data.forEach(item => {
+                polygon.push(new Point(item[0], item[1]));
+            });
+
+        console.log(polygon);
+
+        let p = new Point( Longitude, Latitude );
+        let n = 4;
+    
+        // Function call
+
+        distanceContainer.innerHTML = '';
+
+        if (checkInside(polygon, n, p)) {
+            console.log("Point is inside.");
+            const value = document.createElement('pre');
+            value.textContent = `Point is inside.`;
+            distanceContainer.appendChild(value);
+        }
+        else {
+            console.log("Point is outside.");
+            const value = document.createElement('pre');
+            value.textContent = `Point is outside.`;
+            distanceContainer.appendChild(value);
+        }
+                 
+                // Add a new layer to visualize the polygon.
+                map.addLayer({
+                'id': 'maine',
+                'type': 'fill',
+                'source': 'maine', // reference the data source
+                'layout': {},
+                'paint': {
+                'fill-color': '#0080ff', // blue color fill
+                'fill-opacity': 0.5
+                }
+                });
+                // Add a black outline around the polygon.
+                map.addLayer({
+                'id': 'outline',
+                'type': 'line',
+                'source': 'maine',
+                'layout': {},
+                'paint': {
+                'line-color': '#000',
+                'line-width': 3
+                }
+                });
+
+
             window.setInterval(function () {
             
                 if (navigator.geolocation) {
@@ -84,33 +149,12 @@ let Latitude;
                         // update the drone symbol's location on the map
                         map.getSource('drone').setData(urlJson);
                         map.getSource('line').setData(geojson);
-                        map.setCenter([position.coords.longitude, position.coords.latitude])
+                        //map.setCenter([position.coords.longitude, position.coords.latitude])
                         window.addEventListener("deviceorientation", (event) => {
                             urlJson.properties.rotation = -event.alpha;
                             map.getSource('drone').setData(urlJson);
                         }, true);
-
-                        let dis = 0;
-                        distanceContainer.innerHTML = '';
-
-                        cord_data.forEach(data => {
-                            
-                            let dista = distance(data.lat, data.lng, Latitude, Longitude)
-                            
-                            if(dis == 0) {
-                                dis = dista;
-                                return;
-                            }
-                            
-                            if(dis > dista) {
-                                dis = dista;
-                            }
-                            
-                        })
-
-                        const value = document.createElement('pre');
-                        value.textContent = `Total distance: ${dis}m`;
-                        distanceContainer.appendChild(value);
+                        
                     }
                 }
             }, 2000);
@@ -160,11 +204,11 @@ let Latitude;
             map.on('click', (e) => {
                 let cor = e.lngLat.wrap()
                 
-                cord.push({
-                    'id': ++id,
-                    'lng': cor.lng,
-                    'lat': cor.lat
-                })
+                cord.push([
+                    cor.lng,
+                    cor.lat
+                ])
+                console.log([cor.lng, cor.lat])
                 console.log(cor)
             });
 
@@ -200,3 +244,5 @@ let Latitude;
         // calculate the result
         return(parseInt((c * r) * 1000));
     }
+
+    
