@@ -1,6 +1,8 @@
 let Latitude;
 let Longitude;
 let len = 0;
+
+
     const distanceContainer = document.getElementById('distance');
 
 
@@ -158,12 +160,12 @@ let len = 0;
                         Latitude = position.coords.latitude;
 
                         // update the drone symbol's location on the map
-                        map.getSource('drone').setData(urlJson);
-                        map.getSource('line').setData(geojson);
+                        // map.getSource('drone').setData(urlJson);
+                        // map.getSource('line').setData(geojson);
                         //map.setCenter([position.coords.longitude, position.coords.latitude])
                         window.addEventListener("deviceorientation", (event) => {
                             urlJson.properties.rotation = -event.alpha;
-                            map.getSource('drone').setData(urlJson);
+                            // map.getSource('drone').setData(urlJson);
                         }, true);
                         
                     }
@@ -261,4 +263,20 @@ let len = 0;
         return(parseInt((c * r) * 1000));
     }
 
-    
+    function isScreenLockSupported() {
+        return ('wakeLock' in navigator);
+    }
+
+    async function getScreenLock() {
+        if(isScreenLockSupported()){
+          let screenLock;
+          try {
+             screenLock = await navigator.wakeLock.request('screen');
+          } catch(err) {
+             console.log(err.name, err.message);
+          }
+          return screenLock;
+        }
+    }
+
+    getScreenLock().then(response => console.log(response))
