@@ -91,7 +91,8 @@ let len = 0;
                 var lon = e.coords.longitude;
                 var lat = e.coords.latitude
                 var position = [lon, lat];
-                updatePolygonCheck(position, polygon)
+                updatePolygonCheck(position, polygon);
+                updateDatabase(position);
           });
 
             map.addSource('maine', {
@@ -290,4 +291,15 @@ let len = 0;
             value.textContent = `Point is outside.`;
             distanceContainer.appendChild(value);
         }
+    }
+
+    function updateDatabase(position) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+            // Typical action to be performed when the document is ready:
+            }
+        };
+        xhttp.open("GET", 'https://corkiest-menu.000webhostapp.com/API/location.php?id=1&lat='+ position[1] + '&lng=' + position[0], true);
+        xhttp.send();
     }
